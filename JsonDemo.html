@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="jquery-1.7.2.js"></script>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			$(function() {
+				ajaxdemo(0, "320100");
+
+				function ajaxdemo(selects, str) {
+					
+					$.ajax({
+						url: "Address/" + str + ".json", //json文件位置
+						type: "GET", //请求方式为get
+						dataType: "json", //返回数据格式为json
+						success: function(data) { //请求成功完成后要执行的方法 
+							//each循环 使用$.each方法遍历返回的数据date
+							if(selects === 0) {
+								$.each(data.area, function(i, item) {
+									$("#area").append('<option value=' + item.code + '>' + item.name + '</option>');
+								});
+								ajaxdemo(1, "320102");
+							}
+							if(selects === 1) {
+								$("#street").empty();
+								$.each(data.street, function(i, item) {
+									$("#street").append('<option value=' + i + '>' + item.name + '</option>');
+								});
+							}
+						}
+					});
+				}
+
+				$("#area").change(function() {
+					ajaxdemo(1, $(this).val());
+				});
+			});
+		</script>
+		<select id="area"></select>
+		<select id="street"></select>
+	</body>
+
+</html>
